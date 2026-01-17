@@ -1,0 +1,38 @@
+name: MCBackup-KeepAlive
+on:
+  schedule:
+    - cron: '0 2 * * *'   # 9h sáng VN
+  workflow_dispatch:
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install rclone & sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone sshpass
+      - name: create rclone.conf
+        run: |
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf <<EOF
+          [sftp]
+          type = sftp
+          host = ${{ secrets.SFTP_HOST }}
+          port = ${{ secrets.SFTP_PORT }}
+          user = ${{ secrets.SFTP_USER }}
+          pass = $(rclone obscure "${{ secrets.SFTP_PASS }}")
+          [gdrive]
+          type = drive
+          scope = drive
+          token = {"access_token":"${{ secrets.GD_TOKEN }}","token_type":"Bearer"}
+          EOF
+      - name: backup worlds → Drive
+        run: |
+          DATE=$(date +%F-%H%M)
+          rclone copy sftp:worlds gdrive:mc_backup/$DATE -v --transfers=2
+      - name: keep-alive file
+        run: |
+          echo "$(date) keep-alive" | rclone rcat sftp:keep-alive.txt -v
+      - name: delete old backups (keep 10 GB)
+        run: |
+          rclone delete gdrive:mc_backup --drive-use-trash=false --max-size 9G
