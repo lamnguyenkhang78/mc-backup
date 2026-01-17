@@ -21,11 +21,11 @@ jobs:
           host = ${{ secrets.SFTP_HOST }}
           port = ${{ secrets.SFTP_PORT }}
           user = ${{ secrets.SFTP_USER }}
-          pass = $(rclone obscure "khang@@@2011")
+          pass = $(rclone obscure "(khang@@@2011)")
           [gdrive]
           type = drive
           scope = drive
-          token = {"access_token":"${{ secrets.GD_TOKEN }}","token_type":"Bearer"}
+          token = {"access_token":"ya29.a0AUMWg_Jipx_NwWmXs_g1HR8Qm1Xqtch4RCDADei6QXZdqHMnYpgo3OHGetDbfI64oSRu_rdquMrKhVkN-NGwJK8zAsx9sdEZIKERIRm_PE1lAUwWnZBRBLQYyK0MoFJ444XZwzGx4zw51qESRaqi7D88drZu-izvBH1WhYpBYQI-NN4F4hKp-4t8dT9qTizjF-B8EL4aCgYKAYoSARMSFQHGX2MiwjvqsebzV92oCpKL8-Cy5w0206","token_type":"Bearer","refresh_token":"1//0eoZ6M4h3RcGxCgYIARAAGA4SNwF-L9IrvNFqFVoZkPl7tWpvryggYl2E2cMx981n4ecUZckce-KAorLkcSRWhzn1kf6xgRAfJc4","expiry":"2026-01-17T13:41:37.0212493+07:00","expires_in":3599}
           EOF
       - name: backup worlds → Drive
         run: |
