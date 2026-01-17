@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '0 2 * * *'   # 9h sáng VN
   workflow_dispatch:
+
 jobs:
   backup:
     runs-on: ubuntu-latest
@@ -20,7 +21,7 @@ jobs:
           host = ${{ secrets.SFTP_HOST }}
           port = ${{ secrets.SFTP_PORT }}
           user = ${{ secrets.SFTP_USER }}
-          pass = $(rclone obscure "${{ secrets.SFTP_PASS }}")
+          pass = $(rclone obscure "khang@@@2011")
           [gdrive]
           type = drive
           scope = drive
